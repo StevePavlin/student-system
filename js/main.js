@@ -66,10 +66,6 @@ grade9File.addEventListener('change', function(e) {
 	readFile(grade9File, grade9Area);
 });
 
-grade9File.addEventListener('change', function(e) {
-		
-});
-
 button.addEventListener('click', function(e) {
 	
 	// Check if all inputs are complete
@@ -78,6 +74,8 @@ button.addEventListener('click', function(e) {
 	}
 	
 });
+
+localStorage.setItem('data', null);
 
 
 
