@@ -13,8 +13,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 
 // A simple way to add all the files to the local storage to be used in the viewer
 function appendToStorage(name, data) {
-    var old = localStorage.getItem(name);
-    if(old === null) old = "";
+    var old = localStorage.getItem(name); 
     localStorage.setItem(name, old + data);
 }
 
@@ -75,7 +74,7 @@ button.addEventListener('click', function(e) {
 	
 });
 
-localStorage.setItem('data', null);
+localStorage.setItem('data', "");
 
 
 

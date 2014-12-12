@@ -3,7 +3,9 @@
 /*
  * @desc Performs all the input and output reading and writing to the page
 */
-function IO() {
+function IO(data) {
+
+	this.data = data;
 
 	/* 
 	 * @desc Writes the current formatted data out to the table
@@ -18,7 +20,7 @@ function IO() {
 	*/
 	this.parseFiles() = function() {}
 	
-
+}
 
 
 /*
@@ -109,7 +111,7 @@ function StudentManager() {
 	this.addNewStudent = function(data) {}
 
 
-
+}
 
 /*
  * @desc Contains a Student
@@ -138,3 +140,5 @@ function Student(data) {
 	*/
 	this.atRisk = function() {}
 	 
+
+}
