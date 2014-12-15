@@ -11,14 +11,14 @@ function IO(data) {
 	 * @desc Writes the current formatted data out to the table
 	 * @return void
 	*/
-	this.writeToTable() = function() {}
+	this.writeToTable = function() {};
 
 	/*
 	 * @desc Converts the input string to a 2D array
 	 * @param String data
 	 * @return void
 	*/
-	this.parseFiles() = function() {}
+	this.parseFiles = function() {};
 	
 }
 
@@ -35,7 +35,7 @@ function StudentManager() {
 	 * @param int oen
 	 * @return <Student> 
 	*/
-	this.getStudentByOEN = function(oen) {}
+	this.getStudentByOEN = function(oen) {};
 
 
 	/* 
@@ -43,56 +43,56 @@ function StudentManager() {
 	 * @param String name
 	 * @return <Student>
 	*/
-	this.getStudentsByName = function(name) {}
+	this.getStudentsByName = function(name) {};
 
 	
 	/* 
 	 * @desc Sorts the student list by reading level
 	 * @return Array<Student>
 	*/
-   	this.sortByReadingLevel = function() {}
+   	this.sortByReadingLevel = function() {};
 
 	
 	/* 
 	 * @desc Sorts the student list by reading score
 	 * @return Array<Student>
 	*/
-	this.sortByReadingScore = function {}
+	this.sortByReadingScore = function() {};
 
 		
 	/* 
 	 * @desc Sorts the student list by writing level
 	 * @return Array<Student>
 	*/
-	this.sortByWritingLevel = function() {}
+	this.sortByWritingLevel = function() {};
 
 
 	/* 
 	 * @desc Sorts the student list by writing score
 	 * @return Array<Student>
 	*/
-	this.sortByWritingScore = function() {}
+	this.sortByWritingScore = function() {};
 
 
 	/* 
 	 * @desc Sorts the student list by math level
 	 * @return Array<Student>
 	*/
-	this.sortByMathLevel = function() {}
+	this.sortByMathLevel = function() {};
 
 
 	/* 
 	 * @desc Sorts the student list by math score
 	 * @return Array<Student>
 	*/
-	this.sortByMathScore = function() {}
+	this.sortByMathScore = function() {};
 
 
 	/* 
 	 * @desc Sorts the student list by students at risk
 	 * @return Array<Student>
 	*/
-	this.getStudentsAtRisk = function() {}
+	this.getStudentsAtRisk = function() {};
 
 
 	/* 
@@ -100,7 +100,7 @@ function StudentManager() {
 	 * @param Array<Array> data
 	 * @return void
 	*/
-	this.addStudentsFromData = function(data) {}
+	this.addStudentsFromData = function(data) {};
 		
 
 	/*
@@ -108,10 +108,10 @@ function StudentManager() {
 	 * @param Array data
 	 * @return void
 	*/
-	this.addNewStudent = function(data) {}
+	this.addNewStudent = function(data) {};
 
 
-}
+};
 
 /*
  * @desc Contains a Student
@@ -138,7 +138,7 @@ function Student(data) {
 	 * @desc Checks if the student is at risk of failing
 	 * @return bool - true or false
 	*/
-	this.atRisk = function() {}
+	this.atRisk = function() {};
 	 
 
-}
+};
