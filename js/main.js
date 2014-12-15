@@ -21,7 +21,7 @@ function appendToStorage(name, data) {
 function readFile(file, messageArea) {
 
 var allowedFile = "text/csv";
-var fileProperties = file.files[0]
+var fileProperties = file.files[0];
 
 if (fileProperties.type.match(allowedFile)) {
 	var reader = new FileReader();

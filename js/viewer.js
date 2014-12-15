@@ -6,57 +6,50 @@
 function IO(data) {
 
     this.data = data;
+    
+    // The student manager instance
+    this.studentManager = null;
 
     /* 
      * @desc Writes the current formatted data out to the table
      * @return void
      */
-    this.writeToTable = function () {
+    this.writeToTable = function() {
+        $(document).ready(function () {
+            $("#table").append("Test");
+        });
     };
 
     /*
      * @desc Converts the input string to a 2D array
      * @return void
      */
-    this.parseFiles = function () {
+    this.parseFiles = function() {
         var parsedData = this.data.split(",");
 
-
-        var tempArray = [];
-        for (i = 0; i < parsedData.length; i+=11) {
+        // Keeps track of each student array (2D)
+        var studentData = [];
+        
+        for (i = 0; i < parsedData.length; i += 11) {
             var start = i;
             var end = i + 11;
+
+            var temp = [];
             
-            studentData = [];
-            
+            // Add the current students data to an array
             for (j = start; j < end; j++) {
-                studentData.push(parsedData[j]);
+                temp.push(parsedData[j]);
             }
-            
-            tempArray.push(studentData);
-            
-            
+
+            studentData.push(temp);
+
+
         }
         
-        console.log(tempArray);
-        
-        // Counter
-        /*
-        i = 0;
-        
-        while (i != endIndex) {
-            console.log("start" + i);
-            
-            i += 11;
-            
-            console.log("end" + i);
-            
-            
-        }*/
-             
-
-
-        
+        console.log(studentData);
+        // Create a StudentManager to hang onto, and allow it to create Student objects to hold onto
+        this.studentManager = new StudentManager();
+        this.studentManager.createStudentsFromData(studentData);
         
     };
 
@@ -64,6 +57,7 @@ function IO(data) {
 
 io = new IO(localStorage.getItem("data"));
 io.parseFiles();
+io.writeToTable();
 
 
 
@@ -144,15 +138,26 @@ function StudentManager() {
 	 * @param Array<Array> data
 	 * @return void
 	*/
-	this.addStudentsFromData = function(data) {};
-		
+	this.createStudentsFromData = function(data) {
+            // Loop through each student, create a student object for him/her, and store it
+            for (s = 0; s < data.length; s++) {
+                var studentData = data[s];
+                
+                this.addNewStudent(studentData);
+            }
+            
+        };
 
 	/*
 	 * @desc Adds a new student object to the students Array
 	 * @param Array data
 	 * @return void
 	*/
-	this.addNewStudent = function(data) {};
+	this.addNewStudent = function(data) {
+            var studentObject = new Student(data);
+            this.students.push(studentObject);
+            console.log(studentObject.firstName);
+        };
 
 
 };
@@ -164,18 +169,19 @@ function StudentManager() {
 function Student(data) {
 
 	this.oen = data[0];
-	this.name = data[1];
-	this.gender = data[2];
-	this.IEP = data[3];
+	this.firstName = data[1];
+        this.lastName = data[2];
+	this.gender = data[3];
+	this.IEP = data[4];
 
-	this.readingLevel = data[4];
-	this.readingScore = data[5];
+	this.readingLevel = data[5];
+	this.readingScore = data[6];
 	
-	this.writingLevel = data[6];
-	this.writingScore = data[7];
+	this.writingLevel = data[7];
+	this.writingScore = data[8];
 	
-	this.mathLevel = data[8];
-	this.mathScore = data[9];
+	this.mathLevel = data[9];
+	this.mathScore = data[10];
 	
 	
 	/* 
