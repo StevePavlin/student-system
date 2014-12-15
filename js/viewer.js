@@ -2,25 +2,69 @@
 
 /*
  * @desc Performs all the input and output reading and writing to the page
-*/
+ */
 function IO(data) {
 
-	this.data = data;
+    this.data = data;
 
-	/* 
-	 * @desc Writes the current formatted data out to the table
-	 * @return void
-	*/
-	this.writeToTable = function() {};
+    /* 
+     * @desc Writes the current formatted data out to the table
+     * @return void
+     */
+    this.writeToTable = function () {
+    };
 
-	/*
-	 * @desc Converts the input string to a 2D array
-	 * @param String data
-	 * @return void
-	*/
-	this.parseFiles = function() {};
-	
+    /*
+     * @desc Converts the input string to a 2D array
+     * @return void
+     */
+    this.parseFiles = function () {
+        var parsedData = this.data.split(",");
+
+
+        var tempArray = [];
+        for (i = 0; i < parsedData.length; i+=11) {
+            var start = i;
+            var end = i + 11;
+            
+            studentData = [];
+            
+            for (j = start; j < end; j++) {
+                studentData.push(parsedData[j]);
+            }
+            
+            tempArray.push(studentData);
+            
+            
+        }
+        
+        console.log(tempArray);
+        
+        // Counter
+        /*
+        i = 0;
+        
+        while (i != endIndex) {
+            console.log("start" + i);
+            
+            i += 11;
+            
+            console.log("end" + i);
+            
+            
+        }*/
+             
+
+
+        
+        
+    };
+
 }
+
+io = new IO(localStorage.getItem("data"));
+io.parseFiles();
+
 
 
 /*
