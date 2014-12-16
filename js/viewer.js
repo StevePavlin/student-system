@@ -10,22 +10,67 @@ function IO(data) {
     // The student manager instance
     this.studentManager = null;
 
+
+    /*
+     * @desc Takes in the user input filters, finds an array of student objects that match the filters, sets them as the current studentList, and finally writes to the table.
+     * @return void
+     */
+    this.query = function() {};
+    
+
     /* 
      * @desc Writes the current formatted data out to the table
      * @return void
      */
     this.writeToTable = function() {
-        $(document).ready(function () {
-            $("#table").append("Test");
+        
+        var htmlTable = "<center><table border=1 frame=hsides rules=rows width='80%'><tr>\n\
+            <td>OEN</td>\n\
+            <td>First Name</td>\n\
+            <td>Last Name</td>\n\
+            <td>Gender</td>\n\
+            <td>IEP</td>\n\
+            <td>Reading Level</td>\n\
+            <td>Reading Score</td>\n\
+            <td>Writing Level</td>\n\
+            <td>Writing Score</td>\n\
+            <td>Math Level</td>\n\
+            <td>Math Score</td>\n\
+            </tr>\n\
+            ";
+
+        // Loop through the current data in memory and begin formatting student rows
+        for (var s = 0; s < this.studentManager.students.length; s++) {
+            // Got the students array, now loop through his/her properties
+                for (var p = 0; p < this.studentManager.students[s].properties.length; p++) {
+                    var currentProperty = this.studentManager.students[s].properties[p];
+                    htmlTable += "<td style='width: 200px;'>" + this.studentManager.students[s][currentProperty] + "</td>";
+                }
+        
+            // Done the students row
+            htmlTable += "</tr>";
+
+        }
+        
+        // Done the table
+        htmlTable += "</table></center>";
+
+        
+        $(document).ready(function() {
+            $("#table").append(htmlTable);       
         });
+        
     };
+    
+    
 
     /*
      * @desc Converts the input string to a 2D array
      * @return void
      */
     this.parseFiles = function() {
-        var parsedData = this.data.split(",");
+        // Remove newlines and create an array
+        var parsedData = this.data.replace(/[\n\r]+/g, "").split(",");
 
         // Keeps track of each student array (2D)
         var studentData = [];
@@ -46,10 +91,10 @@ function IO(data) {
 
         }
         
-        console.log(studentData);
         // Create a StudentManager to hang onto, and allow it to create Student objects to hold onto
         this.studentManager = new StudentManager();
         this.studentManager.createStudentsFromData(studentData);
+        console.log(this.studentManager.getStudentByOEN("983829643"));
         
     };
 
@@ -73,7 +118,13 @@ function StudentManager() {
 	 * @param int oen
 	 * @return <Student> 
 	*/
-	this.getStudentByOEN = function(oen) {};
+	this.getStudentByOEN = function(oen) {
+            for (s = 0; s < this.students.length; s++) {
+                if (this.students[s].oen === oen) {
+                    return this.students[s];
+                }
+            }
+        };
 
 
 	/* 
@@ -81,7 +132,7 @@ function StudentManager() {
 	 * @param String name
 	 * @return <Student>
 	*/
-	this.getStudentsByName = function(name) {};
+	this.getStudentByName = function(name) {};
 
 	
 	/* 
@@ -141,8 +192,7 @@ function StudentManager() {
 	this.createStudentsFromData = function(data) {
             // Loop through each student, create a student object for him/her, and store it
             for (s = 0; s < data.length; s++) {
-                var studentData = data[s];
-                
+                var studentData = data[s];   
                 this.addNewStudent(studentData);
             }
             
@@ -156,7 +206,6 @@ function StudentManager() {
 	this.addNewStudent = function(data) {
             var studentObject = new Student(data);
             this.students.push(studentObject);
-            console.log(studentObject.firstName);
         };
 
 
@@ -183,6 +232,8 @@ function Student(data) {
 	this.mathLevel = data[9];
 	this.mathScore = data[10];
 	
+        // An list of the properties to allow for easy looping
+        this.properties = ["oen", "firstName", "lastName", "gender", "IEP", "readingLevel", "readingScore", "writingLevel", "writingScore", "mathLevel", "mathScore"];
 	
 	/* 
 	 * @desc Checks if the student is at risk of failing
