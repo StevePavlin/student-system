@@ -7,8 +7,10 @@ function IO(data) {
 
     this.data = data;
     
-    // The student manager instance
+    // The 3 student manager instances for the 3 grades
     this.studentManager = null;
+    this.studentManager3 = null;
+    this.studentManager9 = null;
 
 
     /*
