@@ -7,10 +7,11 @@ function IO(data) {
 
     this.data = data;
     
-    // The 3 student manager instances for the 3 grades
-    this.studentManager = null;
-    this.studentManager3 = null;
-    this.studentManager9 = null;
+    // A list of StudentManager instances for the 3 files
+    this.studentManagers = [new StudentManager(), new StudentManager(), new StudentManager()];
+    
+    // The Student Manager used to write to the table
+    this.finalManager = new StudentManager();
 
 
     /*
@@ -26,33 +27,33 @@ function IO(data) {
      */
     this.writeToTable = function() {
         
-        var htmlTable = "<center><table border=1 frame=hsides rules=rows width='80%'><tr>\n\
-            <td>OEN</td>\n\
-            <td>First Name</td>\n\
-            <td>Last Name</td>\n\
-            <td>Gender</td>\n\
-            <td>IEP</td>\n\
-            <td>Reading Level</td>\n\
-            <td>Reading Score</td>\n\
-            <td>Writing Level</td>\n\
-            <td>Writing Score</td>\n\
-            <td>Math Level</td>\n\
-            <td>Math Score</td>\n\
+                                // Libraries are great ^_^
+        var htmlTable = "<center><table class='sortable' border=1 frame=hsides rules=rows width='90%'><tr>\n\
+            <th>OEN</th>\n\
+            <th>First Name</th>\n\
+            <th>Last Name</th>\n\
+            <th>Gender</th>\n\
+            <th>IEP</th>\n\
+            <th>Reading Level</th>\n\
+            <th>Reading Score</th>\n\
+            <th>Writing Level</th>\n\
+            <th>Writing Score</th>\n\
+            <th>Math Level</th>\n\
+            <th>Math Score</th>\n\
             </tr>\n\
             ";
-
-        // Loop through the current data in memory and begin formatting student rows
-        for (var s = 0; s < this.studentManager.students.length; s++) {
-            // Got the students array, now loop through his/her properties
-                for (var p = 0; p < this.studentManager.students[s].properties.length; p++) {
-                    var currentProperty = this.studentManager.students[s].properties[p];
-                    htmlTable += "<td style='width: 200px;'>" + this.studentManager.students[s][currentProperty] + "</td>";
-                }
         
+        // Loop through the current data in memory and begin formatting student rows
+        for (var s = 0; s < this.finalManager.students.length - 1; s++) {
+            // Got the students array, now loop through his/her properties
+            for (var p = 0; p < this.finalManager.students[s].properties.length; p++) {
+                var currentProperty = this.finalManager.students[s].properties[p];
+                htmlTable += "<td style='width: 200px;'>" + this.finalManager.students[s][currentProperty] + "</td>";
+            }
             // Done the students row
             htmlTable += "</tr>";
-
         }
+    
         
         // Done the table
         htmlTable += "</table></center>";
@@ -70,9 +71,9 @@ function IO(data) {
      * @desc Converts the input string to a 2D array
      * @return void
      */
-    this.parseFiles = function() {
+    this.parseData = function(data, currentSM) {
         // Remove newlines and create an array
-        var parsedData = this.data.replace(/[\n\r]+/g, "").split(",");
+        var parsedData = data.replace(/[\n\r]+/g, "").split(",");
 
         // Keeps track of each student array (2D)
         var studentData = [];
@@ -94,17 +95,65 @@ function IO(data) {
         }
         
         // Create a StudentManager to hang onto, and allow it to create Student objects to hold onto
-        this.studentManager = new StudentManager();
-        this.studentManager.createStudentsFromData(studentData);
-        console.log(this.studentManager.getStudentByOEN("983829643"));
+        this.studentManagers[currentSM].createStudentsFromData(studentData);
         
+    };
+    
+    /*
+     * @desc Parses all of the files data
+     * @return void
+     */
+    this.parse = function() {
+        
+        this.parseData(localStorage.getItem("grade3"), 0);
+        this.parseData(localStorage.getItem("grade6"), 1);
+        // TODO Add the other files here when needed         
+        
+    };
+    
+    
+    /*
+     * @desc Builds a list of student objects without conflicts from all 3 files, then saves it to a final StudentManager object to be written to the table
+     * @return void
+     */
+    
+    this.merge = function() {
+        
+        var mergedStudentArray = [];
+        // Loop through all the students in the grade 3 data, this is guaranteed to have the most entries
+        for (s = 0; s < this.studentManagers[0].students.length - 1; s++) {
+            var currentStudent = this.studentManagers[0].students[s];
+            
+            // Check if this student exists in the grade 6 data
+            if (this.studentManagers[1].getStudentByOEN(currentStudent.oen) !== null) {
+                // Update the student were on
+                currentStudent = this.studentManagers[1].getStudentByOEN(currentStudent.oen);
+            }
+            
+            
+            // Check if this student exists in the grade 9 data
+            /*if (this.studentManagers[1].getStudentByOEN(currentStudent.oen) !== null) {
+                // Update the student were on
+                currentStudent = this.studentManagers[2].getStudentByOEN(currentStudent.oen);
+            }*/
+            
+            // Now have the most updated info for this student, add him/her to the array
+            mergedStudentArray.push(currentStudent);
+            console.log(currentStudent);
+        }
+       
+        this.finalManager.students = mergedStudentArray;
     };
 
 }
 
-io = new IO(localStorage.getItem("data"));
-io.parseFiles();
+io = new IO();
+io.parse();
+io.merge();
 io.writeToTable();
+
+//io.parseFiles();
+//io.writeToTable();
 
 
 

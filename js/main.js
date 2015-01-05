@@ -13,12 +13,11 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 
 // A simple way to add all the files to the local storage to be used in the viewer
 function appendToStorage(name, data) {
-    var old = localStorage.getItem(name); 
-    localStorage.setItem(name, old + data);
+    localStorage.setItem(name, data);
 }
 
 // Takes an input file, validates and reads it then disables the file input button.
-function readFile(file, messageArea) {
+function readFile(file, messageArea, grade) {
 
 var allowedFile = "text/csv";
 var fileProperties = file.files[0];
@@ -28,7 +27,7 @@ if (fileProperties.type.match(allowedFile)) {
 
 	reader.onload = function(e) {
 		data = reader.result;
-		appendToStorage("data", data);
+                appendToStorage("grade" + grade, data);
 	};
 
 	reader.readAsText(fileProperties);
@@ -54,15 +53,15 @@ var grade9Area = document.getElementById('grade9Area');
 
 // Listen for a submitted file
 grade3File.addEventListener('change', function(e) {
-	readFile(grade3File, grade3Area);
+	readFile(grade3File, grade3Area, "3");
 });
 
 grade6File.addEventListener('change', function(e) {
-	readFile(grade6File, grade6Area);
+	readFile(grade6File, grade6Area, "6");
 });
 
 grade9File.addEventListener('change', function(e) {
-	readFile(grade9File, grade9Area);
+	readFile(grade9File, grade9Area, "9");
 });
 
 button.addEventListener('click', function(e) {
@@ -74,7 +73,9 @@ button.addEventListener('click', function(e) {
 	
 });
 
-localStorage.setItem('data', "");
+localStorage.setItem('grade3', "");
+localStorage.setItem('grade6', "");
+localStorage.setItem('grade9', "");
 
 
 
