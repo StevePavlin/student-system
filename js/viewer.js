@@ -15,7 +15,8 @@ function IO(data) {
      * @desc Takes in the user input filters, finds an array of student objects that match the filters, sets them as the current studentList, and finally writes to the table.
      * @return void
      */
-    this.query = function() {};
+    this.query = function() {
+    }
     
 
     /* 
@@ -41,17 +42,32 @@ function IO(data) {
             ";
         
         // Loop through the current data in memory and begin formatting student rows
-        for (var s = 0; s < this.studentManager.students.length - 1; s++) {
+        for (var s = 0; s < this.studentManager.students.length; s++) {
             // Got the students array, now loop through his/her properties
-            studentObject = this.studentManager.students[s];
+            var currentStudent = this.studentManager.students[s];
             
-            for (var p = 0; p < studentObject.properties.length; p++) {
-                var currentProperty = this.studentManager.students[s].properties[p];
-                htmlTable += "<td style='width: 200px;'>" + this.studentManager.students[s][currentProperty] + "</td>";
+            // Print out the constants
+            for (var c = 0; c < currentStudent.constants.length; c++) {
+                var currentConstant = currentStudent.constants[c];
+                htmlTable += "<td style='width: 200px;'>" + currentConstant + "</td>";
             }
+            
+            // Print out student specific scores and properties
+            for (var i = 0; i < currentStudent.grade3Data.length; i++) {
+                var currentProperty = currentStudent.grade3Data[i]
+                var temp = "";
+                
+                // Check for a blank value and format
+                currentProperty === "" ? temp = "None" : temp = currentProperty;                         
+                
+                // Check for an updated property, if it exists, display them both
+                htmlTable += "<td style='width: 200px;'>" + temp + ", " + currentStudent.grade6Data[i];
+            } 
+            
             // Done the students row
             htmlTable += "</tr>";
         }
+  
     
         
         // Done the table
@@ -111,37 +127,13 @@ function IO(data) {
     };
     
     
-    /*
-     * @desc Builds a list of student objects without conflicts from all 3 files, then saves it to a final StudentManager object to be written to the table
-     * @return void
-     */
-    
-    this.merge = function() {
-        
-        var mergedStudentArray = [];
-        // Loop through all the students in the grade 3 data, this is guaranteed to have the most entries
-        for (s = 0; s < this.studentManagers[0].students.length - 1; s++) {
-            var currentStudent = this.studentManager.students[s];
-            
-            // Check if this student exists in the grade 6 data
-            if (this.studentManagers[1].getStudentByOEN(currentStudent.oen) !== "undefined") {
-                // Update the student were on
-                currentStudent = this.studentManager.getStudentByOEN(currentStudent.oen);
-            }
-           
-            
-            // Now have the most updated info for this student, add him/her to the array
-            mergedStudentArray.push(currentStudent);
-        }
-       
-        this.finalManager.students = mergedStudentArray;
-    };
+
 
 }
 
 io = new IO();
 io.parse();
-//io.writeToTable();
+io.writeToTable();
 
 //io.parseFiles();
 //io.writeToTable();
@@ -234,7 +226,7 @@ function StudentManager() {
 	this.createStudentsFromData = function(data, grade) {
             // Loop through each student, create a student object for him/her, and store it
 
-            for (var s = 0; s < data.length; s++) {
+            for (var s = 0; s < data.length - 1; s++) {
                 var studentData = data[s];
 
                 if (typeof this.getStudentByOEN(studentData[0]) !== "undefined") {
@@ -303,7 +295,7 @@ function Student(data) {
                     break;
 
                 case 9:
-                    this.grade9Data = [data[4]]
+                    this.grade9Data = [data[4]];
                     break;
             }  
             

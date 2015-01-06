@@ -16,7 +16,7 @@
 #side {
     line-height:30px;
     background-color:#eeeeee;
-    height:300px;
+    height:250px;
     width:100px;
     float:left;
     padding:5px; 
@@ -49,13 +49,27 @@
 	<h1>Student Viewer</h1>
 </div>
 <div id="side">
-	<u>Search</u><br>
 	<u>Filters</u><br>
-	<input type="checkbox" name="sex" value="male">Male<br>
-	<input type="checkbox" name="sex" value="female">Female
-	<input type="submit" value="Submit"><br>
+        Math Level
+        <select name="dropdown">
+        <option value="greaterThan" selected>Greater(<)</option>
+        <option value="lessThan">Less(>)</option>
+        </select>
+        <input type="textbox" id="mathLevel" size="9"></br>
+        
+        
+        Math Score
+        <select name="dropdown">
+        <option value="greaterThan" selected>Greater(<)</option>
+        <option value="lessThan">Less(>)</option>
+        </select>
+        <input type="textbox" id="mathScore" size="9"></br></br>
+        <input type="submit" value="Submit" onclick="io.query()">
 </div>
+
 <div id="table">
+    </br>
+    <center><strong>Formatted as: Grade 3, Grade 6. The only Grade 9 column is the final one.</strong></center>
     </br>
    
 </div>
