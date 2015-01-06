@@ -7,11 +7,8 @@ function IO(data) {
 
     this.data = data;
     
-    // A list of StudentManager instances for the 3 files
-    this.studentManagers = [new StudentManager(), new StudentManager(), new StudentManager()];
-    
-    // The Student Manager used to write to the table
-    this.finalManager = new StudentManager();
+    // The Student Manager used to hold the list of students
+    this.studentManager = new StudentManager();
 
 
     /*
@@ -44,11 +41,13 @@ function IO(data) {
             ";
         
         // Loop through the current data in memory and begin formatting student rows
-        for (var s = 0; s < this.finalManager.students.length - 1; s++) {
+        for (var s = 0; s < this.studentManager.students.length - 1; s++) {
             // Got the students array, now loop through his/her properties
-            for (var p = 0; p < this.finalManager.students[s].properties.length; p++) {
-                var currentProperty = this.finalManager.students[s].properties[p];
-                htmlTable += "<td style='width: 200px;'>" + this.finalManager.students[s][currentProperty] + "</td>";
+            studentObject = this.studentManager.students[s];
+            
+            for (var p = 0; p < studentObject.properties.length; p++) {
+                var currentProperty = this.studentManager.students[s].properties[p];
+                htmlTable += "<td style='width: 200px;'>" + this.studentManager.students[s][currentProperty] + "</td>";
             }
             // Done the students row
             htmlTable += "</tr>";
@@ -71,21 +70,21 @@ function IO(data) {
      * @desc Converts the input string to a 2D array
      * @return void
      */
-    this.parseData = function(data, currentSM) {
+    this.parseData = function(data, grade) {
         // Remove newlines and create an array
         var parsedData = data.replace(/[\n\r]+/g, "").split(",");
 
         // Keeps track of each student array (2D)
         var studentData = [];
         
-        for (i = 0; i < parsedData.length; i += 11) {
+        for (var i = 0; i < parsedData.length; i += 11) {
             var start = i;
             var end = i + 11;
 
             var temp = [];
             
             // Add the current students data to an array
-            for (j = start; j < end; j++) {
+            for (j = start; j < end; j++) {               
                 temp.push(parsedData[j]);
             }
 
@@ -95,7 +94,7 @@ function IO(data) {
         }
         
         // Create a StudentManager to hang onto, and allow it to create Student objects to hold onto
-        this.studentManagers[currentSM].createStudentsFromData(studentData);
+        this.studentManager.createStudentsFromData(studentData, grade);
         
     };
     
@@ -105,8 +104,8 @@ function IO(data) {
      */
     this.parse = function() {
         
-        this.parseData(localStorage.getItem("grade3"), 0);
-        this.parseData(localStorage.getItem("grade6"), 1);
+        this.parseData(localStorage.getItem("grade3"), 3);
+        this.parseData(localStorage.getItem("grade6"), 6);
         // TODO Add the other files here when needed         
         
     };
@@ -122,24 +121,17 @@ function IO(data) {
         var mergedStudentArray = [];
         // Loop through all the students in the grade 3 data, this is guaranteed to have the most entries
         for (s = 0; s < this.studentManagers[0].students.length - 1; s++) {
-            var currentStudent = this.studentManagers[0].students[s];
+            var currentStudent = this.studentManager.students[s];
             
             // Check if this student exists in the grade 6 data
-            if (this.studentManagers[1].getStudentByOEN(currentStudent.oen) !== null) {
+            if (this.studentManagers[1].getStudentByOEN(currentStudent.oen) !== "undefined") {
                 // Update the student were on
-                currentStudent = this.studentManagers[1].getStudentByOEN(currentStudent.oen);
+                currentStudent = this.studentManager.getStudentByOEN(currentStudent.oen);
             }
-            
-            
-            // Check if this student exists in the grade 9 data
-            /*if (this.studentManagers[1].getStudentByOEN(currentStudent.oen) !== null) {
-                // Update the student were on
-                currentStudent = this.studentManagers[2].getStudentByOEN(currentStudent.oen);
-            }*/
+           
             
             // Now have the most updated info for this student, add him/her to the array
             mergedStudentArray.push(currentStudent);
-            console.log(currentStudent);
         }
        
         this.finalManager.students = mergedStudentArray;
@@ -149,8 +141,7 @@ function IO(data) {
 
 io = new IO();
 io.parse();
-io.merge();
-io.writeToTable();
+//io.writeToTable();
 
 //io.parseFiles();
 //io.writeToTable();
@@ -171,7 +162,7 @@ function StudentManager() {
 	*/
 	this.getStudentByOEN = function(oen) {
             for (s = 0; s < this.students.length; s++) {
-                if (this.students[s].oen === oen) {
+                if (this.students[s].constants[0] === oen) {
                     return this.students[s];
                 }
             }
@@ -240,11 +231,23 @@ function StudentManager() {
 	 * @param Array<Array> data
 	 * @return void
 	*/
-	this.createStudentsFromData = function(data) {
+	this.createStudentsFromData = function(data, grade) {
             // Loop through each student, create a student object for him/her, and store it
-            for (s = 0; s < data.length; s++) {
-                var studentData = data[s];   
-                this.addNewStudent(studentData);
+
+            for (var s = 0; s < data.length; s++) {
+                var studentData = data[s];
+
+                if (typeof this.getStudentByOEN(studentData[0]) !== "undefined") {
+                    // This student already exists, merge data
+                    this.getStudentByOEN(studentData[0]).updateData(studentData, grade);
+                    
+                    
+                } else {
+                    this.addNewStudent(studentData, grade);
+                }
+                
+                
+                
             }
             
         };
@@ -254,9 +257,11 @@ function StudentManager() {
 	 * @param Array data
 	 * @return void
 	*/
-	this.addNewStudent = function(data) {
+	this.addNewStudent = function(data, grade) {
             var studentObject = new Student(data);
+            studentObject.updateData(data, grade);
             this.students.push(studentObject);
+            
         };
 
 
@@ -268,23 +273,46 @@ function StudentManager() {
 */
 function Student(data) {
 
-	this.oen = data[0];
-	this.firstName = data[1];
-        this.lastName = data[2];
-	this.gender = data[3];
-	this.IEP = data[4];
+        // Positions: [0] OEN, [1] firstName, [2] lastName, [3] gender
+        this.constants = null;
+	
+        
+        // Positions: [0] IEP, [1] readingLevel, [2] readingScore, [3] writingLevel, [4] writingScore, [5] mathLevel, [6] mathScore
+        this.grade3Data = null;
+        this.grade6Data = null;
+        
+        // Positions: [0] Grade 9 Test
+        this.grade9Data = null;
+        
+        
+        
+        
+        /*
+         * @desc Updates the students data for a grade accordingly
+         * @param int grade
+         */
+        this.updateData = function(data, grade) {
+            // Assign grade data variables accordingly
+            switch(grade) {
+                case 3:
+                    this.grade3Data = [data[4], data[5], data[6], data[7], data[8], data[9], data[10]];
+                    break;
 
-	this.readingLevel = data[5];
-	this.readingScore = data[6];
-	
-	this.writingLevel = data[7];
-	this.writingScore = data[8];
-	
-	this.mathLevel = data[9];
-	this.mathScore = data[10];
-	
-        // An list of the properties to allow for easy looping
-        this.properties = ["oen", "firstName", "lastName", "gender", "IEP", "readingLevel", "readingScore", "writingLevel", "writingScore", "mathLevel", "mathScore"];
+                case 6:          
+                    this.grade6Data = [data[4], data[5], data[6], data[7], data[8], data[9], data[10]];
+                    break;
+
+                case 9:
+                    this.grade9Data = [data[4]]
+                    break;
+            }  
+            
+            // Set the constants
+            this.constants = [data[0], data[1], data[2], data[3]];
+           
+        };
+        
+
 	
 	/* 
 	 * @desc Checks if the student is at risk of failing
