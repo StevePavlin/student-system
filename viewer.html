@@ -16,8 +16,8 @@
 #side {
     line-height:30px;
     background-color:#eeeeee;
-    height:250px;
-    width:100px;
+    height:700px;
+    width:150px;
     float:left;
     padding:5px; 
 }
@@ -50,20 +50,48 @@
 </div>
 <div id="side">
 	<u>Filters</u><br>
-        Math Level
-        <select name="dropdown">
-        <option value="greaterThan" selected>Greater(<)</option>
-        <option value="lessThan">Less(>)</option>
+        Reading Level</br>
+        <select name="dropdown" id="readingLevelOptions">
+        <option value="greaterThan"><</option>
+        <option value="lessThan">></option>
         </select>
-        <input type="textbox" id="mathLevel" size="9"></br>
+        <input type="textbox" id="readingLevel" size="9"></br></br>
         
+        Reading Score</br>
+        <select name="dropdown" id="readingScoreOptions">
+        <option value="greaterThan"><</option>
+        <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="readingScore" size="9"></br></br>
         
-        Math Score
-        <select name="dropdown">
-        <option value="greaterThan" selected>Greater(<)</option>
-        <option value="lessThan">Less(>)</option>
+        Writing Level</br>
+        <select name="dropdown" id="writingLevelOptions">
+        <option value="greaterThan"><</option>
+        <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="writingLevel" size="9"></br></br>
+        
+        Writing Score</br>
+        <select name="dropdown" id="writingScoreOptions">
+        <option value="greaterThan"><</option>
+        <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="writingScore" size="9"></br></br>
+        
+        Math Level</br>
+        <select name="dropdown" id="mathLevelOptions">
+        <option value="greaterThan"><</option>
+        <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="mathLevel" size="9"></br></br>
+        
+        Math Score</br>
+        <select name="dropdown" id="mathScoreOptions">
+        <option value="greaterThan"><</option>
+        <option value="lessThan">></option>
         </select>
         <input type="textbox" id="mathScore" size="9"></br></br>
+        
         <input type="submit" value="Submit" onclick="io.query()">
 </div>
 
