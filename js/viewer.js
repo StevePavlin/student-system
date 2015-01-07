@@ -17,7 +17,12 @@ function IO(data) {
      */
     this.query = function() {        
         
+        // List of the filters and their info after input
         filters = {
+            
+            "iep": {
+                "clicked": $("#iep").is(":checked")
+            },
              
             "reading": {
                 "level": {
@@ -66,195 +71,163 @@ function IO(data) {
         for (var s in this.studentManager.students) {
             var currentStudent = this.studentManager.students[s];
             
-            var pass = true;
+            // Tracks if Student passes search critera
+            var iep = true;
+            var pass1 = true;
+            var pass2 = true;
+            var pass3 = true;
+            var pass4 = true;
+            var pass5 = true;
+            var pass6 = true;
             
-            // Loop through categories
-            for (var c in filters) {
-                var currentCat = filters[c];
-                // Loop through subcategory
-                for (var i in currentCat) {
-                    var currentSubcat = filters[c][i];
+            
+            for (var cat in filters) {
+                var currentCat = filters[cat];
+                
+                for (var subCat in filters[cat]) {
                     
-
-                    console.log(currentSubcat.value)
-                    // Is this subcategorys input blank?
+                    var currentSubcat = filters[cat][subCat];
+                    
                     if (currentSubcat.value === "") {
-                        i++;
+                        subCat++;
+                    }
+        
+                    console.log(cat, subCat, currentSubcat.operator, currentSubcat.value);
+                    
+                    if (cat === "iep") {
+                        console.log("iep is " + filters[cat].clicked);
+                        if (currentCat.clicked) {
+                            if (currentStudent.grade3Data[0] === "x" || currentStudent.grade6Data[0] === "x") {
+                                iep = true;
+                            } else {
+                                iep = false;
+                            }
+                        }
                     }
                     
-
-                    // Check the condition against the current students properties and logs if he passes all filters, then adds it to the temporary list if necassary
-
-                    
-                    switch(c) {
+                    if (cat === "reading") {
+                        if (subCat === "level") {
+                            if (currentSubcat.operator === "<") {
+                                if (currentStudent.grade3Data[1] < currentSubcat.value || currentStudent.grade6Data[1] < currentSubcat.value) {
+                                    pass1 = true;
+                                } else {
+                                    pass1 = false;
+                                }
+                            }
+                            if (currentSubcat.operator === ">") {
+                                if (currentStudent.grade3Data[1] > currentSubcat.value || currentStudent.grade6Data[1] > currentSubcat.value) {
+                                    pass1 = true;
+                                } else {
+                                    pass1 = false;
+                                }                               
+                            }               
+                        }
                         
-                          
-                        
-                        case "reading":
-                            switch(i) {
-                                
-                                case "level":
-                                    switch(filters[c][i].operator) {
-                                        case ">":
-                                            console.log("triggered reading level >");
-                                            if (currentStudent.grade3Data[1] > currentSubcat.value || currentStudent.grade6Data[1] > currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }      
-                                            break;
-                                        case "<":
-                                            console.log("triggered reading level <");
-                                            if (currentStudent.grade3Data[1] < currentSubcat.value || currentStudent.grade6Data[1] < currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }                                           
-                                            break;
-                                    }
-                                    break;
-                                    
-                                case "score":
-                                    switch(filters[c][i].operator) {
-                                        case ">":
-                                            console.log("triggered reading score >");
-                                            if (currentStudent.grade3Data[2] > currentSubcat.value || currentStudent.grade6Data[2] > currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }   
-                                            break;
-                                        case "<":
-                                            console.log("triggered reading score <");
-                                            if (currentStudent.grade3Data[2] < currentSubcat.value || currentStudent.grade6Data[2] < currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }   
-                                            break;
-                                    }
-                                    break;
+                        if (subCat === "score") {
+                            if (currentSubcat.operator === "<") {
+                                if (currentStudent.grade3Data[2] < currentSubcat.value || currentStudent.grade6Data[2] < currentSubcat.value) {
+                                    pass2 = true;
+                                } else {
+                                    pass2 = false;
+                                }
                             }
-                            break;
-                            
-                            
-                        case "writing":
-                             switch(i) {
-                                case "level":
-                                    switch(filters[c][i].operator) {
-                                        case ">":
-                                            console.log("triggered writing level >");
-                                            if (currentStudent.grade3Data[3] > currentSubcat.value || currentStudent.grade6Data[3] > currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }     
-                                            break;
-                                        case "<":
-                                            console.log("triggered writing level <");
-                                            if (currentStudent.grade3Data[3] < currentSubcat.value || currentStudent.grade6Data[3] < currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }   
-                                            break;
-                                    }
-                                    break;
-                                
-                                case "score":
-                                    switch(filters[c][i].operator) {
-                                        case ">":
-                                            console.log("triggered writing score >");
-                                            if (currentStudent.grade3Data[4] > currentSubcat.value || currentStudent.grade6Data[4] > currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }    
-                                            break;
-                                        case "<":
-                                            console.log("triggered writing score <");
-                                            if (currentStudent.grade3Data[4] < currentSubcat.value || currentStudent.grade6Data[4] < currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }     
-                                            break;
-                                    }
-                                    break;
-                            }
-                            break;
-                            
-                            
-                        case "math":
-                             switch(i) {
-                                case "level":
-                                    switch(filters[c][i].operator) {
-                                        case ">":
-                                            console.log("triggered math level >");
-                                            if (currentStudent.grade3Data[5] > currentSubcat.value || currentStudent.grade6Data[5] > currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }                                                 
-                                            break;
-                                        case "<":
-                                            console.log("triggered math level <");                                             
-                                            if (currentStudent.grade3Data[5] < currentSubcat.value || currentStudent.grade6Data[5] < currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }                                                  
-                                            break;
-                                    }
-                                    break;
-                                case "score":
-                                    switch(filters[c][i].operator) {
-                                        case ">":
-                                            console.log("triggered math score >");                                           
-                                            if (currentStudent.grade3Data[6] > currentSubcat.value || currentStudent.grade6Data[6] > currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }                                
-                                            break;
-                                        case "<":
-                                            console.log("triggered math score <");
-                                            if (currentStudent.grade3Data[6] < currentSubcat.value || currentStudent.grade6Data[6] < currentSubcat.value) {
-                                                pass = true;
-                                            } 
-                                            else {
-                                                pass = false;
-                                            }                                               
-                                            break;
-                                    }
-                                    break;
-                            }
-                            break;
-                    } // End switch
+                            if (currentSubcat.operator === ">") {
+                                if (currentStudent.grade3Data[2] > currentSubcat.value || currentStudent.grade6Data[2] > currentSubcat.value) {
+                                    pass2 = true;
+                                } else {
+                                    pass2 = false;
+                                }                                
+                            }                                           
+                        }
+                    } 
                     
                     
-                } // End subcat loop
-            } // End cat loop
-            
+                    if (cat === "writing") {
+                        if (subCat === "level") {
+                            if (currentSubcat.operator === "<") {
+                                if (currentStudent.grade3Data[3] < currentSubcat.value || currentStudent.grade6Data[3] < currentSubcat.value) {
+                                    pass3 = true;
+                                } else {
+                                    pass3 = false;
+                                }
+                            }
+                            if (currentSubcat.operator === ">") {
+                                if (currentStudent.grade3Data[3] > currentSubcat.value || currentStudent.grade6Data[3] > currentSubcat.value) {
+                                    pass3 = true;
+                                } else {
+                                    pass3 = false;
+                                }
+                            }
+                        }
 
-            pass ? studentList.push(currentStudent) : null;
+                        if (subCat === "score") {
+                            if (currentSubcat.operator === "<") {
+                                if (currentStudent.grade3Data[4] < currentSubcat.value || currentStudent.grade6Data[4] < currentSubcat.value) {
+                                    pass4 = true;
+                                } else {
+                                    pass4 = false;
+                                }
+                            }
+                            if (currentSubcat.operator === ">") {
+                                if (currentStudent.grade3Data[4] > currentSubcat.value || currentStudent.grade6Data[4] > currentSubcat.value) {
+                                    pass4 = true;
+                                } else {
+                                    pass4 = false;
+                                }
+                            }
+                        }
+                    } 
+                    
+                    if (cat === "math") {
+                        if (subCat === "level") {
+                            if (currentSubcat.operator === "<") {
+                                if (currentStudent.grade3Data[5] < currentSubcat.value || currentStudent.grade6Data[5] < currentSubcat.value) {
+                                    pass5 = true;
+                                } else {
+                                    pass5 = false;
+                                }
+                            }
+                            if (currentSubcat.operator === ">") {
+                                if (currentStudent.grade3Data[5] > currentSubcat.value || currentStudent.grade6Data[5] > currentSubcat.value) {
+                                    pass5 = true;
+                                } else {
+                                    pass5 = false;
+                                }
+                            }
+                        }
+
+                        if (subCat === "score") {
+                            if (currentSubcat.operator === "<") {
+                                if (currentStudent.grade3Data[6] < currentSubcat.value || currentStudent.grade6Data[6] < currentSubcat.value) {
+                                    pass6 = true;
+                                } else {
+                                    pass6 = false;
+                                }
+                            }
+                            if (currentSubcat.operator === ">") {
+                                if (currentStudent.grade3Data[6] > currentSubcat.value || currentStudent.grade6Data[6] > currentSubcat.value) {
+                                    pass6 = true;
+                                } else {
+                                    pass6 = false;
+                                }
+                            }
+                        }                       
+                    }
+                    
+                    
+                    
+                }
+            }
+
+            console.log(pass1, pass2, pass3, pass4, pass5, pass6)        
+            iep && pass1 && pass2 && pass3 && pass4 && pass5 && pass6 ? studentList.push(currentStudent) : null;
+      
             
         } // End student loop
      
         
-        //console.log(studentList);
-        //console.log(studentList.length);
+        console.log(studentList);
+        console.log(studentList.length);
         
         
         this.writeToTable(studentList);
@@ -301,13 +274,15 @@ function IO(data) {
             // Print out student specific scores and properties
             for (var i = 0; i < currentStudent.grade3Data.length; i++) {
                 var currentProperty = currentStudent.grade3Data[i]
-                var temp = "";
+                var temp3 = "";
+                var temp6 = "";
                 
                 // Check for a blank value and format
-                currentProperty === "" ? temp = "None" : temp = currentProperty;                         
+                currentProperty === "" ? temp3 = "None" : temp3 = currentProperty;       
+                currentStudent.grade6Data[i] === "" ? temp6 = "None" : temp6 = currentStudent.grade6Data[i];
                 
                 // Check for an updated property, if it exists, display them both
-                htmlTable += "<td style='width: 200px;'>" + temp + ", " + currentStudent.grade6Data[i];
+                htmlTable += "<td style='width: 200px;'>" + temp3 + ", " + temp6;
             } 
             
             // Done the students row
@@ -405,63 +380,6 @@ function StudentManager() {
                 }
             }
         };
-
-
-	/* 
-	 * @desc Finds a student by an input name
-	 * @param String name
-	 * @return <Student>
-	*/
-	this.getStudentByName = function(name) {};
-
-	
-	/* 
-	 * @desc Sorts the student list by reading level
-	 * @return Array<Student>
-	*/
-   	this.sortByReadingLevel = function() {};
-
-	
-	/* 
-	 * @desc Sorts the student list by reading score
-	 * @return Array<Student>
-	*/
-	this.sortByReadingScore = function() {};
-
-		
-	/* 
-	 * @desc Sorts the student list by writing level
-	 * @return Array<Student>
-	*/
-	this.sortByWritingLevel = function() {};
-
-
-	/* 
-	 * @desc Sorts the student list by writing score
-	 * @return Array<Student>
-	*/
-	this.sortByWritingScore = function() {};
-
-
-	/* 
-	 * @desc Sorts the student list by math level
-	 * @return Array<Student>
-	*/
-	this.sortByMathLevel = function() {};
-
-
-	/* 
-	 * @desc Sorts the student list by math score
-	 * @return Array<Student>
-	*/
-	this.sortByMathScore = function() {};
-
-
-	/* 
-	 * @desc Sorts the student list by students at risk
-	 * @return Array<Student>
-	*/
-	this.getStudentsAtRisk = function() {};
 
 
 	/* 
