@@ -3,12 +3,59 @@
 /*
  * @desc Performs all the input and output reading and writing to the page
  */
-function IO(data) {
+function IO() {
 
-    this.data = data;
-    
     // The Student Manager used to hold the list of students
     this.studentManager = new StudentManager();
+
+    /*
+     * @desc Determines if a students grades pass the filters requirements
+     * @params Student student, int paramIndex, String subCatOperator, String subCatOperator1, String value, String value2 
+     */
+    this.passesTest = function(student, paramIndex, subCatOperator, subCatOperator1, subCatValue, subCatValue1) {
+        if (subCatOperator === ">" && subCatOperator1 === "<") {
+            if ((student.grade3Data[paramIndex] > subCatValue && student.grade3Data[paramIndex] < subCatValue1) ||
+                    (student.grade6Data[paramIndex] > subCatValue && student.grade6Data[paramIndex] < subCatValue1)) {
+                return true;
+
+            } else {
+                return false;
+            }
+        }
+
+        if (subCatOperator === "<" && subCatOperator1 === ">") {
+            if ((student.grade3Data[paramIndex] < subCatValue && student.grade3Data[paramIndex] > subCatValue1) ||
+                    (student.grade6Data[paramIndex] < subCatValue && student.grade6Data[paramIndex] > subCatValue1)) {
+                return true;
+
+            } else {
+                return false;
+            }
+        }
+
+        else if (subCatOperator === "<") {
+            if (student.grade3Data[paramIndex] < subCatValue || student.grade6Data[paramIndex] < subCatValue) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else if (subCatOperator === ">") {
+            if (student.grade3Data[paramIndex] > subCatValue || student.grade6Data[paramIndex] > subCatValue) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else if (subCatOperator === "=") {
+            if (student.grade3Data[paramIndex] === subCatValue || student.grade6Data[paramIndex] === subCatValue) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+    };
 
 
     /*
@@ -27,12 +74,17 @@ function IO(data) {
             "reading": {
                 "level": {
                     "operator": $("#readingLevelOptions option:selected").text(),
-                    "value": $("#readingLevel").val()
+                    "value": $("#readingLevel").val(),
+                    "operator1": $("#readingLevelOptions1 option:selected").text(),
+                    "value1": $("#readingLevel1").val()
+                    
                 },
                 
                 "score": {
                      "operator": $("#readingScoreOptions option:selected").text(),
-                     "value": $("#readingScore").val()                   
+                     "value": $("#readingScore").val(),    
+                     "operator1": $("#readingScoreOptions1 option:selected").text(),
+                     "value1": $("#readingScore1").val()
                 }
                 
             },
@@ -40,12 +92,16 @@ function IO(data) {
             "writing": {
                 "level": {
                     "operator": $("#writingLevelOptions option:selected").text(),
-                    "value": $("#writingLevel").val()                   
+                    "value": $("#writingLevel").val(),    
+                    "operator1": $("#writingLevelOptions1 option:selected").text(),
+                    "value1": $("#writingLevel1").val()
                 },
                 
                 "score": {
                     "operator": $("#writingScoreOptions option:selected").text(),
-                    "value": $("#writingScore").val()                    
+                    "value": $("#writingScore").val(),
+                    "operator1": $("#writingScoreOptions1 option:selected").text(),
+                    "value1": $("#writingScore1").val()
                 }
                 
             },
@@ -53,12 +109,16 @@ function IO(data) {
             "math":  {
                 "level": {
                     "operator": $("#mathLevelOptions option:selected").text(),
-                    "value": $("#mathLevel").val()                   
+                    "value": $("#mathLevel").val(),
+                    "operator1": $("#mathLevelOptions1 option:selected").text(),
+                    "value1": $("#mathLevel1").val()
                 },
                 
                 "score": {
                     "operator": $("#mathScoreOptions option:selected").text(),
-                    "value": $("#mathScore").val()                    
+                    "value": $("#mathScore").val(),      
+                    "operator1": $("#mathScoreOptions1 option:selected").text(),
+                    "value1": $("#mathScore1").val()
                 }
                 
                 
@@ -95,122 +155,40 @@ function IO(data) {
                     console.log(cat, subCat, currentSubcat.operator, currentSubcat.value);
                     
                     if (cat === "iep") {
-                        console.log("iep is " + filters[cat].clicked);
                         if (currentCat.clicked) {
-                            if (currentStudent.grade3Data[0] === "x" || currentStudent.grade6Data[0] === "x") {
-                                iep = true;
-                            } else {
-                                iep = false;
-                            }
+                            currentStudent.grade3Data[0] === "x" || currentStudent.grade6Data[0] === "x" ? iep = true : iep = false
                         }
                     }
                     
                     if (cat === "reading") {
                         if (subCat === "level") {
-                            if (currentSubcat.operator === "<") {
-                                if (currentStudent.grade3Data[1] < currentSubcat.value || currentStudent.grade6Data[1] < currentSubcat.value) {
-                                    pass1 = true;
-                                } else {
-                                    pass1 = false;
-                                }
-                            }
-                            if (currentSubcat.operator === ">") {
-                                if (currentStudent.grade3Data[1] > currentSubcat.value || currentStudent.grade6Data[1] > currentSubcat.value) {
-                                    pass1 = true;
-                                } else {
-                                    pass1 = false;
-                                }                               
-                            }               
+                            pass1 = this.passesTest(currentStudent, 1, currentSubcat.operator, currentSubcat.operator1, currentSubcat.value, currentSubcat.value1);                            
                         }
+                    
                         
                         if (subCat === "score") {
-                            if (currentSubcat.operator === "<") {
-                                if (currentStudent.grade3Data[2] < currentSubcat.value || currentStudent.grade6Data[2] < currentSubcat.value) {
-                                    pass2 = true;
-                                } else {
-                                    pass2 = false;
-                                }
-                            }
-                            if (currentSubcat.operator === ">") {
-                                if (currentStudent.grade3Data[2] > currentSubcat.value || currentStudent.grade6Data[2] > currentSubcat.value) {
-                                    pass2 = true;
-                                } else {
-                                    pass2 = false;
-                                }                                
-                            }                                           
+                            pass2 = this.passesTest(currentStudent, 2, currentSubcat.operator, currentSubcat.operator1, currentSubcat.value, currentSubcat.value1);                                         
                         }
                     } 
                     
                     
                     if (cat === "writing") {
                         if (subCat === "level") {
-                            if (currentSubcat.operator === "<") {
-                                if (currentStudent.grade3Data[3] < currentSubcat.value || currentStudent.grade6Data[3] < currentSubcat.value) {
-                                    pass3 = true;
-                                } else {
-                                    pass3 = false;
-                                }
-                            }
-                            if (currentSubcat.operator === ">") {
-                                if (currentStudent.grade3Data[3] > currentSubcat.value || currentStudent.grade6Data[3] > currentSubcat.value) {
-                                    pass3 = true;
-                                } else {
-                                    pass3 = false;
-                                }
-                            }
+                            pass3 = this.passesTest(currentStudent, 3, currentSubcat.operator, currentSubcat.operator1, currentSubcat.value, currentSubcat.value1);
                         }
 
                         if (subCat === "score") {
-                            if (currentSubcat.operator === "<") {
-                                if (currentStudent.grade3Data[4] < currentSubcat.value || currentStudent.grade6Data[4] < currentSubcat.value) {
-                                    pass4 = true;
-                                } else {
-                                    pass4 = false;
-                                }
-                            }
-                            if (currentSubcat.operator === ">") {
-                                if (currentStudent.grade3Data[4] > currentSubcat.value || currentStudent.grade6Data[4] > currentSubcat.value) {
-                                    pass4 = true;
-                                } else {
-                                    pass4 = false;
-                                }
-                            }
+                            pass4 = this.passesTest(currentStudent, 4, currentSubcat.operator, currentSubcat.operator1, currentSubcat.value, currentSubcat.value1);
                         }
                     } 
                     
                     if (cat === "math") {
                         if (subCat === "level") {
-                            if (currentSubcat.operator === "<") {
-                                if (currentStudent.grade3Data[5] < currentSubcat.value || currentStudent.grade6Data[5] < currentSubcat.value) {
-                                    pass5 = true;
-                                } else {
-                                    pass5 = false;
-                                }
-                            }
-                            if (currentSubcat.operator === ">") {
-                                if (currentStudent.grade3Data[5] > currentSubcat.value || currentStudent.grade6Data[5] > currentSubcat.value) {
-                                    pass5 = true;
-                                } else {
-                                    pass5 = false;
-                                }
-                            }
+                            pass5 = this.passesTest(currentStudent, 5, currentSubcat.operator, currentSubcat.operator1, currentSubcat.value, currentSubcat.value1);
                         }
 
                         if (subCat === "score") {
-                            if (currentSubcat.operator === "<") {
-                                if (currentStudent.grade3Data[6] < currentSubcat.value || currentStudent.grade6Data[6] < currentSubcat.value) {
-                                    pass6 = true;
-                                } else {
-                                    pass6 = false;
-                                }
-                            }
-                            if (currentSubcat.operator === ">") {
-                                if (currentStudent.grade3Data[6] > currentSubcat.value || currentStudent.grade6Data[6] > currentSubcat.value) {
-                                    pass6 = true;
-                                } else {
-                                    pass6 = false;
-                                }
-                            }
+                            pass6 = this.passesTest(currentStudent, 6, currentSubcat.operator, currentSubcat.operator1, currentSubcat.value, currentSubcat.value1);
                         }                       
                     }
                     
@@ -250,13 +228,13 @@ function IO(data) {
             <th>First Name</th>\n\
             <th>Last Name</th>\n\
             <th>Gender</th>\n\
-            <th>IEP</th>\n\
-            <th>Reading Level</th>\n\
-            <th>Reading Score</th>\n\
-            <th>Writing Level</th>\n\
-            <th>Writing Score</th>\n\
-            <th>Math Level</th>\n\
-            <th>Math Score</th>\n\
+            <th colspan='2'>IEP</th>\n\
+            <th colspan='2'>Reading Level</th>\n\
+            <th colspan='2'>Reading Score</th>\n\
+            <th colspan='2'>Writing Level</th>\n\
+            <th colspan='2'>Writing Score</th>\n\
+            <th colspan='2'>Math Level</th>\n\
+            <th colspan='2'>Math Score</th>\n\
             </tr>\n\
             ";
         
@@ -268,7 +246,7 @@ function IO(data) {
             // Print out the constants
             for (var c = 0; c < currentStudent.constants.length; c++) {
                 var currentConstant = currentStudent.constants[c];
-                htmlTable += "<td style='width: 200px;'>" + currentConstant + "</td>";
+                htmlTable += "<td style='width: 100px;'>" + currentConstant + "</td>";
             }
             
             // Print out student specific scores and properties
@@ -278,17 +256,20 @@ function IO(data) {
                 var temp6 = "";
                 
                 // Check for a blank value and format
-                currentProperty === "" ? temp3 = "None" : temp3 = currentProperty;       
-                currentStudent.grade6Data[i] === "" ? temp6 = "None" : temp6 = currentStudent.grade6Data[i];
+                currentProperty === "" ? temp3 = "<td>None</td>" : temp3 = "<td>" + currentProperty + "</td>";       
+                currentStudent.grade6Data[i] === "" ? temp6 = "<td>None</td>" : temp6 = "<td>" + currentStudent.grade6Data[i] + "</td>";
+                
+                
                 
                 // Check for an updated property, if it exists, display them both
-                htmlTable += "<td style='width: 200px;'>" + temp3 + ", " + temp6;
+                htmlTable += temp3 + temp6;
             } 
             
             // Done the students row
             htmlTable += "</tr>";
         }
-  
+        
+        
     
         
         // Done the table

@@ -6,6 +6,16 @@
 </head>
 
 <style type='text/css'>
+    
+    th {
+        border: 2px solid black;
+        text-align: center;
+    }
+    
+    table td {
+        border: 1px solid black;
+        text-align: center;
+    }
 
 #header {
     background-color:black;
@@ -16,8 +26,7 @@
 #side {
     line-height:30px;
     background-color:#eeeeee;
-    height:700px;
-    width:150px;
+
     float:left;
     padding:5px; 
 }
@@ -52,58 +61,118 @@
 	<u>Filters</u><br>
         
         <input type="checkbox" name="iep" id="iep">IEP<br>
+
+        <hr>
         
         Reading Level</br>
         <select name="dropdown" id="readingLevelOptions">
-        <option value="greaterThan"><</option>
-        <option value="lessThan">></option>
+            <option value="blank"></option>
+            <option value="equals">=</option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
         </select>
-        <input type="textbox" id="readingLevel" size="9"></br></br>
-        
+        <input type="textbox" id="readingLevel" size="3"></br>       
+        <select name="dropdown" id="readingLevelOptions1">
+            <option value="blank"></option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="readingLevel1" size="3">
+
+        <hr>
+       
         Reading Score</br>
         <select name="dropdown" id="readingScoreOptions">
-        <option value="greaterThan"><</option>
-        <option value="lessThan">></option>
+            <option value="blank"></option>
+            <option value="equals">=</option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
         </select>
-        <input type="textbox" id="readingScore" size="9"></br></br>
+        <input type="textbox" id="readingScore" size="3"></br>     
+        <select name="dropdown" id="readingScoreOptions1">
+            <option value="blank"></option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="readingScore1" size="3">
+        
+        <hr>
         
         Writing Level</br>
         <select name="dropdown" id="writingLevelOptions">
-        <option value="greaterThan"><</option>
-        <option value="lessThan">></option>
+            <option value="blank"></option>
+            <option value="equals">=</option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
         </select>
-        <input type="textbox" id="writingLevel" size="9"></br></br>
+        <input type="textbox" id="writingLevel" size="3"></br>
+        <select name="dropdown" id="writingLevelOptions1">
+            <option value="blank"></option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="writingLevel1" size="3">
         
+        <hr>
         Writing Score</br>
-        <select name="dropdown" id="writingScoreOptions">
-        <option value="greaterThan"><</option>
-        <option value="lessThan">></option>
+         <select name="dropdown" id="writingScoreOptions">
+            <option value="blank"></option>
+            <option value="equals">=</option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
         </select>
-        <input type="textbox" id="writingScore" size="9"></br></br>
+        <input type="textbox" id="writingScore" size="3"></br>
+        <select name="dropdown" id="writingScoreOptions1">
+            <option value="blank"></option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="writingScore1" size="3">
+        <hr>
+        
         
         Math Level</br>
-        <select name="dropdown" id="mathLevelOptions">
-        <option value="greaterThan"><</option>
-        <option value="lessThan">></option>
+         <select name="dropdown" id="mathLevelOptions">
+            <option value="blank"></option>
+            <option value="equals">=</option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
         </select>
-        <input type="textbox" id="mathLevel" size="9"></br></br>
+        <input type="textbox" id="mathLevel" size="3"></br>
+        <select name="dropdown" id="mathLevelOptions1">
+            <option value="blank"></option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="mathLevel1" size="3">
         
+        <hr>
+
         Math Score</br>
         <select name="dropdown" id="mathScoreOptions">
-        <option value="greaterThan"><</option>
-        <option value="lessThan">></option>
+            <option value="blank"></option>
+            <option value="equals">=</option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
         </select>
-        <input type="textbox" id="mathScore" size="9"></br></br>
+        <input type="textbox" id="mathScore" size="3"></br>
+        <select name="dropdown" id="mathScoreOptions1">
+            <option value="blank"></option>
+            <option value="greaterThan"><</option>
+            <option value="lessThan">></option>
+        </select>
+        <input type="textbox" id="mathScore1" size="3">
         
-        <input type="submit" value="Submit" onclick="io.query()">
+        <hr>
+        
+
+            <input type="submit" value="Submit" onclick="io.query()">
+        
 </div>
 
-<div id="table">
+    
     </br>
-    <center><strong>Formatted as: Grade 3, Grade 6. The only Grade 9 column is the final one.</strong></center>
+    <center><strong>Formatted as: Grade 3 | Grade 6. The only Grade 9 column is the final one.</strong></center>
     </br>
-   
-</div>
-<div id="footer">
-	Placeholder
+  <div id="table"> 
 </div>
