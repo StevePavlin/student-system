@@ -245,7 +245,7 @@ function IO(data) {
         $("#table").empty();
         
                                 // Libraries are great ^_^
-        var htmlTable = "<center><table class='sortable' border=1 frame=hsides rules=rows width='90%'><tr>\n\
+        var htmlTable = "<center><table class='sortable' border=1 frame=hsides rules=rows width='88%'><tr>\n\
             <th>OEN</th>\n\
             <th>First Name</th>\n\
             <th>Last Name</th>\n\

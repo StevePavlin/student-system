@@ -8,25 +8,26 @@
 <style type='text/css'>
 
 #header {
-    background-color:black;
-    color:white;
+    background-color: #045FB4;
+    color:#F3F781;
     text-align:center;
     padding:5px;
 }
 #side {
-    line-height:30px;
-    background-color:#eeeeee;
+    line-height:20px;
+    background-color:#5882FA;
     height:700px;
     width:150px;
     float:left;
-    padding:5px; 
+    padding:5px;
+    padding-left: 0px
 }
 #nav {
     background-color:grey; 
 	text-align:center;	
 }
 #footer {
-    background-color:black;
+    background-color:#045FB4;
     color:white;
     clear:both;
     text-align:center;
@@ -42,21 +43,23 @@
 }
  
  th { text-align: left; }
- td { padding: 5px; border-bottom: 1px solid black; border-collapse: collapse; border-spacing: 0px; }
- table { border: 3px solid black; }
+ td {padding: 5px; border-bottom: 1px solid black; border-collapse: collapse; border-spacing: 0px; }
+ table { border: 3px solid black; 
+         background-color: #F3F781;
+ }
 </style>
 <div id="header">
 	<h1>Student Viewer</h1>
 </div>
 <div id="side">
-	<u>Filters</u><br>
+    <center><u><i><b>FILTERS:</b></i></u></center><br>
         
         <input type="checkbox" name="iep" id="iep">IEP<br>
         
         Reading Level</br>
         <select name="dropdown" id="readingLevelOptions">
-        <option value="greaterThan"><</option>
-        <option value="lessThan">></option>
+        <option value="greaterThan"></option>
+        <option value="lessThan"></option>
         </select>
         <input type="textbox" id="readingLevel" size="9"></br></br>
         

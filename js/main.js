@@ -22,7 +22,7 @@ function readFile(file, messageArea, grade) {
 var allowedFile = "text/csv";
 var fileProperties = file.files[0];
 
-if (fileProperties.type.match(allowedFile)) {
+//if (fileProperties.type.match(allowedFile)) {
 	var reader = new FileReader();
 
 	reader.onload = function(e) {
@@ -36,9 +36,9 @@ if (fileProperties.type.match(allowedFile)) {
 	// Disable the button
 	file.disabled = true
 
-	} else {
-		messageArea.innerText = "Filetype not supported.";
-	}
+	//} else {
+		//messageArea.innerText = "Filetype not supported.";
+	//}
 };
 
 // Get the ids of the input files and areas
